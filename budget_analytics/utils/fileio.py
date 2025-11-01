@@ -61,6 +61,15 @@ class FileIO:
             df = df[df["User"] == self.user.value]
         return df
 
+    def read_splitwise(self):
+        files = os.listdir(self.root_data_path / "splitwise")
+        dates = [file.split("_")[1] for file in files]
+        max_date = max(dates)
+        df = pd.read_csv(
+            self.root_data_path / "splitwise" / files[dates.index(max_date)]
+        )
+        return df.iloc[:-1]
+
 
 def description_to_expense_category(text: str) -> ExpenditureCategory | None:
     if "oystercard" in text.lower():
